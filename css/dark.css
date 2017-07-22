@@ -1,0 +1,71 @@
+body {
+    background-color: black;
+    color: white;
+}
+.infoTitle {
+    color: #CCDDFF;
+    text-align: center;
+    font-size: 3em;
+
+}
+.infoClass {
+    color: #DDCCDD;
+    font-size: 1.5em;
+    /*float: left;*/
+       margin: .3em;
+       padding: 1em;
+    display: inline-block;
+        border: double;
+    border-color: #CCDDFF;
+}
+
+
+.infoClassEntry {
+    color: blue;
+    text-align: center;
+    margin-left: 4px;
+    font-size: 2em;
+}
+
+.infoClassList {
+    color: #CCDDCC;
+    text-align: center;
+    margin: 1.5em;
+}
+
+.regClass {
+}
+.regClassList {
+    
+}
+/*.regClassEntry {
+    border: groove;
+    border-color: #CCDDFF;
+}*/
+.regClassItem {
+    color: #914201;
+    text-align: left;
+    font-size: 1.5em;
+
+}
+.regClassUrl {
+    color: #ef9245;
+    font-size: 1em;
+    text-align: left;
+}
+.regClassTitle, .callTitle {
+    color: #c4c450;
+    text-align: center;
+    font-size: 2.5em;
+}
+.regClassNetInf {
+    color: #d6d602;
+    font-size: 1.5em;
+}
+
+.callInfo {
+    padding: 10px;
+}
+.callOrder {
+    font-size:1.5em;
+}
