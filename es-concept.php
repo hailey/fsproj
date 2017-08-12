@@ -1,45 +1,27 @@
 <?php
-require 'vendor/autoload.php';
+require ('fsESHandler.php');
 
 $hosts = ['wilma.athnex.com:9200'];
+$callid = 'call_records.stage';
+$callindex = 'cdr';
 
-$client = Elasticsearch\ClientBuilder::create()->setHosts($hosts)->build();
-/*
-$params = [
-    'index' => 'call_records',
-    'type' => 'cdr',
-    'body' => [ 'uuid' => 'dd9b128e-6aba-11e7-96e3-31f53089cfd0',
-			    'direction' => 'inbound',
-				'created' => '2017-07-16 23:40:49',
-				'created_epoch' => '1500272364',
-				'name' => 'sofia/internal/225500@quinn.athnex.com',
-				'state' => 'CS_EXECUTE',
-				'cid_name' => 'Hailey Clark',
-				'cid_num' => '225500',
-				'ip_addr' => '66.63.164.214',
-				'dest' => '3055']
-];
-*/
-/*
-$params = [
-    'index' => 'call_records',
-    'type' => 'cdr',
-    'body' => [
-        'query' => 'match_all'
-        ]
-];
+$eshandler =  new esCallHandler($hosts,
+				$callid,
+				$callindex);
 
-$response = $client->search($params);*/
+$response = $eshandler->getViaUuid('feef66d4-6e7e-11e7-b55c-31f53089cfd0');
 
-$params = [
-    'index' => 'call_records.stage',
-    'type' => 'cdr',
-    'id' => 'feef66d4-6e7e-11e7-b55c-31f53089cfd0',
-    'client' => [ 'ignore' => 404 ] 
-];
+var_dump($response); 
 
-// Get doc at /my_index/my_type/my_id
-$response = $client->get($params);
+echo "\n\n\n";
 
-var_dump($response);
+$response = $eshandler->searchField('switchname','quinn.athnex.com');
+
+foreach ($response["hits"]["hits"] as $hits) {
+	echo "Direction: " . $hits['_source']['variables']['direction'] , "\n";
+	echo "UUID: ". $hits['_source']['variables']['uuid'];
+	echo "\n\n";
+}
+
+
 ?>

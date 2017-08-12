@@ -5,23 +5,30 @@
 
 $working_dir = 'working/json-xml-cdr';
 $hosts = ['wilma.athnex.com:9200'];
-
+$esIndex = 'call_records.stage';
+$esType  = 'cdr';
 require 'vendor/autoload.php';
 
 $client = Elasticsearch\ClientBuilder::create()->setHosts($hosts)->build();
-
+if (!is_dir($working_dir)){
+    echo "Unable to locate $working_dir as a valid working dir.\n";
+    exit;
+}
 // Lets start the directory read loop.
 $dh = opendir($working_dir);
 while ($entry = readdir($dh)) {
     if(is_dir($entry)){
         continue;
     }
+    if($entry == '.' OR $entry == '..'){
+        continue;
+    }
     $json_contents = file_get_contents($working_dir.'/'.$entry);
     $uuid = str_replace('.cdr.json','',$entry);
     
     $params = [
-     'index' => 'call_records.stage',
-     'type' => 'cdr',
+     'index' => $esIndex,
+     'type' => $esType,
      'id'   => $uuid,
      'body' => $json_contents
     ];
@@ -31,6 +38,8 @@ while ($entry = readdir($dh)) {
     if ($response['result'] == 'updated' OR $response['result'] == 'created') {
         echo "Done with $uuid!\n Entry version [". $response['_version']."]\n";
         echo "Deleting file ". $working_dir.'/'.$entry ."\n"; // Kidding, not actually doing this.
+        unlink ($working_dir.'/'.$entry);
+        echo "Deleted ".$working_dir.'/'.$entry."\n";
     } else {
         echo "Error processing ". $working_dir.'/'.$entry ."\n";
     }
