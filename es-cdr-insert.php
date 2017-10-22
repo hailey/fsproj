@@ -2,11 +2,15 @@
 /*
  *This should read json objects stored in 
  */
-
+$start = microtime(true);
+ 
+ 
 $working_dir = 'working/json-xml-cdr';
-$hosts = ['wilma.athnex.com:9200'];
+$hosts = ['alison.athnex.com:9200'];
 $esIndex = 'call_records.stage';
 $esType  = 'cdr';
+$esTotalCnt = 0;
+$esTotalFail = 0;
 require 'vendor/autoload.php';
 
 $client = Elasticsearch\ClientBuilder::create()->setHosts($hosts)->build();
@@ -40,9 +44,14 @@ while ($entry = readdir($dh)) {
         echo "Deleting file ". $working_dir.'/'.$entry ."\n"; // Kidding, not actually doing this.
         unlink ($working_dir.'/'.$entry);
         echo "Deleted ".$working_dir.'/'.$entry."\n";
+        $esTotalCnt++;
     } else {
+        $esTotalFail++;
         echo "Error processing ". $working_dir.'/'.$entry ."\n";
     }
     continue;
 }
+echo "Total inserted is ". $esTotalCnt ." and total Failures is ". $esTotalFail ."\n";
+$timeElapsed = microtime(true) - $start;
+echo "Total time taken $timeElapsed\n";
 ?>
