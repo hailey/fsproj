@@ -4,7 +4,7 @@
  */
 
 $working_dir = 'working/json-xml-cdr';
-$hosts = ['wilma.athnex.com:9200'];
+$hosts = ['alison.athnex.com:9200'];
 $esIndex = 'call_records.stage';
 $esType  = 'cdr';
 require 'vendor/autoload.php';
