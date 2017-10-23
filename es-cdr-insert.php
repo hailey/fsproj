@@ -9,6 +9,7 @@ $working_dir = 'working/json-xml-cdr';
 $hosts = ['alison.athnex.com:9200'];
 $esIndex = 'call_records.stage';
 $esType  = 'cdr';
+$verbose = 0;
 $esTotalCnt = 0;
 $esTotalFail = 0;
 require 'vendor/autoload.php';
@@ -40,10 +41,11 @@ while ($entry = readdir($dh)) {
     echo "Inserting $entry into elasticsearch\n";
     $response = $client->index($params);
     if ($response['result'] == 'updated' OR $response['result'] == 'created') {
-        echo "Done with $uuid!\n Entry version [". $response['_version']."]\n";
-        echo "Deleting file ". $working_dir.'/'.$entry ."\n"; // Kidding, not actually doing this.
-        unlink ($working_dir.'/'.$entry);
-        echo "Deleted ".$working_dir.'/'.$entry."\n";
+        if ($verbose != 0) {
+            echo "Done with $uuid!\n Entry version [". $response['_version']."]\n";
+            echo "Deleting file ". $working_dir.'/'.$entry ."\n"; // Kidding, not actually doing this.
+        }
+        unlink ($working_dir.'/'.$entry); // maybe I wasnt.        
         $esTotalCnt++;
     } else {
         $esTotalFail++;
