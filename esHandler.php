@@ -112,6 +112,21 @@ class esInsertStats {
 			return false;
 		}
 	}
+	
+		//This just returns the damn array.
+	function getKeyList (){
+		$workingKey = &$this->keyArray;
+		return $workingKey;
+	}
+	function arrayDump(){
+		$workingKey = &$this->keyArray;
+		$output = "<br />\n";
+		foreach ($workingKey as $key => $keyval) {
+			$keyavg = $this->getAverage($key);
+			$output .= "For $key I got $keyval values averaging $keyavg<br />\n";
+		}
+		return $output;
+	}
     //This should be commented out eventually.
     function debugDUMP() {
         var_dump($this->keyArray);

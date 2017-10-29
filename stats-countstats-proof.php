@@ -8,21 +8,27 @@ $var = new esInsertStats();
 $var2 = new esInsertStats();
 
 runDataset($testDataSetA,$var);
-runDataset($testDataSetB,$var);
+runDataset($testDataSetB,$var,2,12);
 
-runDataset($testDataSetA,$var2);
+runDataset($testDataSetA,$var2,2,7);
 
-function runDataset($dataset, &$var) {
-    echo "\n<h1>Running</h1>\n";
+function runDataset($dataset, &$var,$min=1,$max=6) {
+    echo "\n<h1>Running ($min to $max)</h1>\n";
     foreach ($dataset as $key => $keyval) {
         print "Inserting $key,  $keyval x times.<br />\n";
         for ($i = 0; $i != $keyval; $i++){
-            $rval = rand(7,10);
-            echo "Key = $key [ $i ]  adding $rval <br />\n";
+            $rval = rand($min,$max);
+            //echo "Key = $key [ $i ]  adding $rval <br />\n";
             $var->increment($key,$rval);
         }
             $out = $var->getAverage($key);
-        echo "\n<br />Average for '$key' = $out<br />\n";
+            
+       // echo "\n<br />Average for '$key' = $out<br />\n";
+    }
+    $arrayDump = $var->getKeyList();
+    foreach ( $arrayDump as $key => $keyval ){
+        $keyavg = $var->getAverage($key);
+        echo "For $key I got an Average of $keyavg.<br />\n";
     }
 }
 echo "\n<h1>Now to dump the object...</h1>\n\n";
