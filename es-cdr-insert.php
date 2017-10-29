@@ -9,7 +9,7 @@ $working_dir = 'working/json-xml-cdr';
 $hosts = ['alison.athnex.com:9200'];
 $esIndex = 'call_records.stage';
 $esType  = 'cdr';
-$verbose = 0;
+$verbose = 1;
 $esTotalCnt = 0;
 $esTotalFail = 0;
 require 'vendor/autoload.php';
@@ -45,13 +45,14 @@ while ($entry = readdir($dh)) {
     if ($response['result'] == 'updated' OR $response['result'] == 'created') {
         if ($verbose != 0) {
             echo "Done with $uuid!\n Entry version [". $response['_version']."]\n";
-            $statHdlr->increment($response['_version']);
             echo "Deleting file ". $working_dir.'/'.$entry ."\n"; // Kidding, not actually doing this.
         }
        // unlink ($working_dir.'/'.$entry); // maybe I wasnt.        
+        $statHdlr->increment($response['_version']);
         $esTotalCnt++;
     } else {
-        $esTotalFail++;
+        $esTotalFail++;  
+        $statHdlr->increment('error');
         echo "Error processing ". $working_dir.'/'.$entry ."\n";
     }
     continue;
@@ -65,4 +66,6 @@ echo "Total inserted is ". $esTotalCnt ." and total Failures is ". $esTotalFail 
 $timeElapsed = (microtime(true) - $start) / 60;
 $accurateTime = microtime(true) - $start;
 echo "Total time taken $timeElapsed  ( $accurateTime ) seconds.\n";
+$out = $statHdlr->arrayDump();
+echo $out;
 ?>
