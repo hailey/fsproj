@@ -69,11 +69,13 @@ class esInsertStats {
         
         $this->keyArray      = array();
         $this->timesInserted = array();
+		$this->keyInsertedC  = array();
     }
     
     function increment($key, $value = 1) {
         $workingKey = &$this->keyArray[(string)$key];
         $workingTI  = &$this->timesInserted[(string)$key];
+		$insertCnt  = &$this->keyInsertedC[(string)$key];
         if(isset($workingKey)){
             $workingKey++;
         } else {
@@ -84,6 +86,11 @@ class esInsertStats {
             $workingTI += $value;
         else
             $workingTI = $value;
+		
+		if(isset($insertCnt))
+			$insertCnt++;
+		else
+			$insertCnt = 1;
         //if
         /*
         //Take the Average, 42. Keycount = 27.
@@ -94,6 +101,17 @@ class esInsertStats {
         $this->statCount++;
         */
     }
+	
+	function getAverage($key) {
+		//$workingKey = &$this->keyArray[(string)$key];
+		$workingTI  = &$this->timesInserted[(string)$key];
+		$insertCnt  = &$this->keyInsertedC[(string)$key];
+		if(isset($workingTI)){
+			return $workingTI / $insertCnt;
+		} else {
+			return false;
+		}
+	}
     //This should be commented out eventually.
     function debugDUMP() {
         var_dump($this->keyArray);
@@ -101,6 +119,8 @@ class esInsertStats {
         var_dump($this->totalCounted);
         echo "\n<hr />\n";
         var_dump($this->timesInserted);
+		echo "\n<hr />\n";
+		var_dump($this->keyInsertedC);
     }
 }
 ?>

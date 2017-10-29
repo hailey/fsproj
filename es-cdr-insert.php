@@ -13,6 +13,8 @@ $verbose = 0;
 $esTotalCnt = 0;
 $esTotalFail = 0;
 require 'vendor/autoload.php';
+require 'esHandler.php';
+$statHdlr = new esInsertStats();
 
 $client = Elasticsearch\ClientBuilder::create()->setHosts($hosts)->build();
 if (!is_dir($working_dir)){
@@ -43,9 +45,10 @@ while ($entry = readdir($dh)) {
     if ($response['result'] == 'updated' OR $response['result'] == 'created') {
         if ($verbose != 0) {
             echo "Done with $uuid!\n Entry version [". $response['_version']."]\n";
+            $statHdlr->increment($response['_version']);
             echo "Deleting file ". $working_dir.'/'.$entry ."\n"; // Kidding, not actually doing this.
         }
-        unlink ($working_dir.'/'.$entry); // maybe I wasnt.        
+       // unlink ($working_dir.'/'.$entry); // maybe I wasnt.        
         $esTotalCnt++;
     } else {
         $esTotalFail++;
@@ -53,6 +56,7 @@ while ($entry = readdir($dh)) {
     }
     continue;
 }
+
 echo "Total inserted is ". $esTotalCnt ." and total Failures is ". $esTotalFail ."\n";
 $timeElapsed = (microtime(true) - $start) / 60;
 $accurateTime = microtime(true) - $start;
