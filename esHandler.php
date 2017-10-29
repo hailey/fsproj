@@ -77,18 +77,18 @@ class esInsertStats {
         $workingTI  = &$this->timesInserted[(string)$key];
 		$insertCnt  = &$this->keyInsertedC[(string)$key];
         if(isset($workingKey)){
-            $workingKey++;
+            $workingKey += $value;
         } else {
             $workingKey = $value;
         }
         $this->totalCounted++;
         if(isset($workingTI))
-            $workingTI += $value;
+            $workingTI = $workingTI + 2; // I donno :()
         else
             $workingTI = $value;
 		
 		if(isset($insertCnt))
-			$insertCnt++;
+			$insertCnt = $insertCnt + 1;
 		else
 			$insertCnt = 1;
         //if
@@ -103,11 +103,13 @@ class esInsertStats {
     }
 	
 	function getAverage($key) {
-		//$workingKey = &$this->keyArray[(string)$key];
+		$workingKey = &$this->keyArray[(string)$key];
 		$workingTI  = &$this->timesInserted[(string)$key];
 		$insertCnt  = &$this->keyInsertedC[(string)$key];
+		var_dump($workingTI);
+		var_dump($workingKey);
 		if(isset($workingTI)){
-			return $workingTI / $insertCnt;
+			return $workingTI / $workingKey;
 		} else {
 			return false;
 		}

@@ -47,8 +47,13 @@ while ($entry = readdir($dh)) {
             echo "Done with $uuid!\n Entry version [". $response['_version']."]\n";
             echo "Deleting file ". $working_dir.'/'.$entry ."\n"; // Kidding, not actually doing this.
         }
-       // unlink ($working_dir.'/'.$entry); // maybe I wasnt.        
-        $statHdlr->increment($response['_version']);
+       // unlink ($working_dir.'/'.$entry); // maybe I wasnt.
+        if($response['result'] == 'created')
+            $statHdlr->increment('1');
+        else
+            $statHdlr->increment($response['_version']);
+            
+        echo "gpt ".  $response['_version'] ." gpt\n";
         $esTotalCnt++;
     } else {
         $esTotalFail++;  
@@ -58,14 +63,15 @@ while ($entry = readdir($dh)) {
     continue;
 }
     $arrayDump = $statHdlr->getKeyList();
+    //var_dump($arrayDump);
     foreach ( $arrayDump as $key => $keyval ){
         $keyavg = $statHdlr->getAverage($key);
-        echo "For $key I got an Average of $keyavg.\n";
+        echo "For $key I got an Average of $keyavg from $keyval.\n";
     }
 echo "Total inserted is ". $esTotalCnt ." and total Failures is ". $esTotalFail ."\n";
 $timeElapsed = (microtime(true) - $start) / 60;
 $accurateTime = microtime(true) - $start;
 echo "Total time taken $timeElapsed  ( $accurateTime ) seconds.\n";
-$out = $statHdlr->arrayDump();
-echo $out;
+//$out = $statHdlr->debugDump();
+//echo $out;
 ?>

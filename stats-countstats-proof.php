@@ -2,7 +2,7 @@
 require ('esHandler.php');
 //This is our test dataset.
 $testDataSetA = ['1'=>23,'2'=>3,'3'=> 12,'4'=> 8,'5' => 3];
-$testDataSetB = ['1'=>37,'2'=>116,'3'=> 15,'4'=> 0,'5' => 52,'6' => 12];
+$testDataSetB = ['1'=>37,'2'=>116,'3'=> 15,'4'=> 0,'5' => 52,'6' => 12,'9' => 3];
 
 $var = new esInsertStats();
 $var2 = new esInsertStats();
@@ -11,6 +11,17 @@ runDataset($testDataSetA,$var);
 runDataset($testDataSetB,$var,2,12);
 
 runDataset($testDataSetA,$var2,2,7);
+echo "\n<h1>Now to dump the object...</h1>\n\n";
+
+$var->debugDump();
+echo "\n<h2>and</h2>\n";
+$var2->debugDump();
+echo "done.";
+
+echo "\n<h1>This test is important...</h1>\n\n";
+
+checkKeyList($var);
+
 
 function runDataset($dataset, &$var,$min=1,$max=6) {
     echo "\n<h1>Running ($min to $max)</h1>\n";
@@ -31,10 +42,16 @@ function runDataset($dataset, &$var,$min=1,$max=6) {
         echo "For $key I got an Average of $keyavg.<br />\n";
     }
 }
-echo "\n<h1>Now to dump the object...</h1>\n\n";
 
-$var->debugDump();
-echo "\n<h2>and</h2>\n";
-$var2->debugDump();
-echo "done.";
+function checkKeyList($dataSet) {
+        $arrayDump = $dataSet->getKeyList();
+    //var_dump($arrayDump);
+    foreach ( $arrayDump as $key => $keyval ){
+        $keyavg = $dataSet->getAverage($key);
+        echo "For $key I got an Average of $keyavg.<br />\n";
+    }
+}
+
+
+
 ?> 
