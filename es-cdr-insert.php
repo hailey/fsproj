@@ -54,6 +54,7 @@ while ($entry = readdir($dh)) {
     continue;
 }
 echo "Total inserted is ". $esTotalCnt ." and total Failures is ". $esTotalFail ."\n";
-$timeElapsed = microtime(true) - $start;
-echo "Total time taken $timeElapsed\n";
+$timeElapsed = (microtime(true) - $start) / 60;
+$accurateTime = microtime(true) - $start;
+echo "Total time taken $timeElapsed  ( $accurateTime ) seconds.\n";
 ?>

@@ -1,57 +1,25 @@
 <?php
-require 'vendor/autoload.php';
+require ('esHandler.php');
+//This is our test dataset.
+$testDataSet = ['1'=>23,'2'=>3,'3'=> 12,'4'=> 8,'5' => 2];
 
-class esCallHandler {
-    private $handler;
-    private $callindex,$calltype;
-    
-    function __construct($hosts,$callid,$callindex) {
-			$this->handler = Elasticsearch\ClientBuilder::create()
-											->setHosts($hosts)
-											->build();
-											
-			$this->callindex = $callid;
-			$this->calltype = $callindex;				
+
+$var = new esInsertStats();
+
+
+
+
+foreach ($testDataSet as $key => $keyval) {
+    print "Inserting $keyval into $key <br />\n";
+    for ($i = 0; $i != $keyval; $i++){
+        echo "$key is $i <br />\n";
+        $var->increment($key,rand(1,5));
     }
-    
-	function getViaUuid($uuid) {
-		$params = [
-			'index' => $this->callindex,
-			'type' => $this->calltype,
-			'id' => $uuid,
-			'client' => [ 'ignore' => 404 ] 
-		];
-		try {
-			$response = $this->handler->get($params);
-		} catch (Exception $e) {
-			echo $e->getMessage(),"\n";
-			return NULL;
-		}
-
-		return $response;
-	}
-	
-	function searchField($field,$data) {
-		$params = [
-			'index' => $this->callindex,
-			'type' => $this->calltype,
-			'body' => [
-				'query' => [
-					'match' => [
-						$field => $data
-					]
-				]
-			]
-		];
-		try {
-			$results = $this->handler->search($params);
-			return $results;
-		} catch (Exception $e) {
-			echo $e->getMessage(),"\n";
-			return NULL;
-		}			
-	}
 }
+
+echo "\n<h1>Now to dump the object...</h1>\n\n";
+$var->debugDump();
+
 
 class esInsertStats {
     private $totalCounted;
@@ -103,4 +71,5 @@ class esInsertStats {
         var_dump($this->timesInserted);
     }
 }
-?>
+echo "done.";
+?> 
