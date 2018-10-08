@@ -83,7 +83,7 @@ class esInsertStats {
         }
         $this->totalCounted++;
         if(isset($workingTI))
-            $workingTI = $workingTI + 2; // I donno :()
+            $workingTI = $workingTI + $value; // I donno :()
         else
             $workingTI = $value;
 		
