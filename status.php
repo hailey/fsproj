@@ -5,8 +5,8 @@ include('fsRPCHandler.php');
 
 $fsUser       = "freeswitch";
 $fsPass       = "fs";
-$fsHost       = "quinn.athnex.com";
-$fsPort       = 8080;
+$fsHost       = "107.170.213.226";
+$fsPort       = 9366;
 
 $handle = new fsRPCHandler($fsHost,$fsPort,$fsUser,$fsPass);
 $registrationList   = $handle->getFSregistrations();

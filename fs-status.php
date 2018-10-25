@@ -5,8 +5,8 @@ include('lib/xmlrpc.inc');
 
 $fsUser       = "freeswitch";
 $fsPass       = "fs";
-$fsHost       = "quinn.athnex.com";
-$fsPort       = 8080;
+$fsHost       = "thevoices.faith";
+$fsPort       = 9366;
 
 $f=new xmlrpcmsg('freeswitch.api',
         array(
